@@ -92,7 +92,6 @@ object BestMentionHelper {
   import edu.knowitall.repr.document.Sentenced
   import edu.knowitall.repr.sentence.Sentence
 
-  import edu.knowitall.tool.bestmention.BestMentionFinderOriginalAlgorithm.locationContainsLocation
   import edu.knowitall.tool.bestmention.BestMentionFinderOriginalAlgorithm.TipsterData
 
 
@@ -100,18 +99,18 @@ object BestMentionHelper {
   type RBMDoc = Document with Sentenced[_ <: Sentence] with BestMentionResolvedDocument with DocId
 
   def bothStates(rbm: ContainerBestMention): Boolean = {
-    TipsterData.stateOrProvinces.contains(rbm.containerEntity.cleanText.toLowerCase) &&
-    TipsterData.stateOrProvinces.contains(rbm.target.cleanText.toLowerCase)
+    TipsterData.provinceNameMap.contains(rbm.containerEntity.cleanText.toLowerCase) &&
+    TipsterData.provinceNameMap.contains(rbm.target.cleanText.toLowerCase)
   }
 
   def stateContainsCity(rbm: ContainerBestMention): Boolean = {
-    TipsterData.cities.contains(rbm.target.cleanText.toLowerCase) &&
-    TipsterData.stateOrProvinces.contains(rbm.containerEntity.cleanText.toLowerCase)
+    TipsterData.cityNameMap.contains(rbm.target.cleanText.toLowerCase) &&
+    TipsterData.provinceNameMap.contains(rbm.containerEntity.cleanText.toLowerCase)
   }
 
   def countryContainsCity(rbm: ContainerBestMention): Boolean = {
-    TipsterData.cities.contains(rbm.target.cleanText.toLowerCase) &&
-    TipsterData.countries.contains(rbm.containerEntity.cleanText.toLowerCase)
+    TipsterData.cityNameMap.contains(rbm.target.cleanText.toLowerCase) &&
+    TipsterData.countryNameMap.contains(rbm.containerEntity.cleanText.toLowerCase)
   }
 
   def context(offset: Int, doc: RBMDoc): String = {
