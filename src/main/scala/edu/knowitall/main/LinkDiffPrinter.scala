@@ -30,7 +30,7 @@ object LinkDiffPrinter extends App {
 
   val zippedDocs = baselineExtracted.zip(rulesExtracted).zip(corefExtracted)
 
-  val psout = new java.io.PrintStream(args(1))
+  val psout = new java.io.PrintStream(args(4))
 
   val diffPrinter = new LinkDiffPrinter(psout)
   psout.println(diffPrinter.columnHeaderString)
