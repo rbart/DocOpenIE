@@ -14,20 +14,19 @@ import edu.knowitall.tool.document.OpenIEBaselineExtractor
 import edu.knowitall.tool.document.OpenIEDocumentExtractor
 import edu.knowitall.tool.document.OpenIENoCorefDocumentExtractor
 import edu.knowitall.tool.document.OpenIECorefExpandedDocumentExtractor
+import java.io.File
 
 object LinkDiffPrinter extends App {
 
   val sentencedDocuments = KbpDocumentSentencer.loadSentencedDocs(args(0))
 
-  val parsedDocuments = sentencedDocuments.map(DocumentParser.defaultInstance.parse)
+  val baselineDocs = new File(args(0)).listFiles()
+  val nocorefDocs = new File(args(1)).listFiles()
+  val corefDocs = new File(args(2)).listFiles()
   
-  val baseline = new OpenIEBaselineExtractor()
-  val rules = new OpenIENoCorefDocumentExtractor()
-  val coref = new OpenIECorefExpandedDocumentExtractor()
-  
-  val baselineExtracted = parsedDocuments.map(baseline.extract)
-  val rulesExtracted = parsedDocuments.map(rules.extract)
-  val corefExtracted = parsedDocuments.map(coref.extract)
+  val baselineExtracted = baselineDocs.map(FullDocSerializer.deserializeFromFile)
+  val rulesExtracted = nocorefDocs.map(FullDocSerializer.deserializeFromFile)
+  val corefExtracted = corefDocs.map(FullDocSerializer.deserializeFromFile)
 
   val zippedDocs = baselineExtracted.zip(rulesExtracted).zip(corefExtracted)
 
