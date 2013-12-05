@@ -93,15 +93,18 @@ class OpenIEBaselineExtractor extends OpenIEDocumentExtractor {
 
   import OpenIEDocumentExtractor._
 
-  type InputDoc = Document with Sentenced[BaseSentence] with DocId
-  type OutputDoc = Document with OpenIELinked with Sentenced[Sentence with OpenIEExtracted] with DocId
+  type InputDoc = Document with Sentenced[BaseSentence] with StanfordNERAnnotated with CorefResolved with DocId
+  type OutputDoc = Document with OpenIELinked with Sentenced[Sentence with OpenIEExtracted] with BestMentionResolvedDocument with StanfordNERAnnotated with CorefResolved with DocId
 
   def extract(d: InputDoc): OutputDoc = {
 
-    new Document(d.text) with OpenIELinker with Sentenced[Sentence with OpenIEExtracted] with DocId {
+    new Document(d.text) with OpenIELinker with Sentenced[Sentence with OpenIEExtracted] with BestMentionResolvedDocument with StanfordNERAnnotated with CorefResolved with DocId {
       val sentences = d.sentences
       val linker = entityLinker
       val docId = d.docId
+      val allBestMentions = Nil
+      val NERAnnotatedDoc = d.NERAnnotatedDoc
+      val clusters = d.clusters
     }
   }
 }
